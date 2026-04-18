@@ -106,6 +106,13 @@ body {
   text-align: center;
   padding: 10px;
   line-height: 1.8;
+  overflow: hidden;
+}
+.q-image-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ── ORANGE BANNER ── */
@@ -286,6 +293,18 @@ body {
   animation: circlePop 0.65s cubic-bezier(.34,1.56,.64,1) 0.15s both;
 }
 
+.result-cat-img {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: auto;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
 /* idle bob on the whole badge */
 @keyframes badgeBob {
   0%,100% { transform: translateY(0px); }
@@ -453,7 +472,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q1.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q1 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns1.png" alt="Q1 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">The Night Feels Different. It's late. The void deck is quieter, but not quiet-quiet. Lights hum. Someone laughs upstairs. A plastic bag drifts past. Echo tilts their head. "Eh… does today feel different to you or am I just tired?"</p>
@@ -476,7 +495,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q2.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q2 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns2.png" alt="Q2 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">Your Instinct Kicks In. Nothing bad is happening. But something feels off. Not scary. Just messy. Bug-Eye squints at the lights. "When this happens, what do you usually do without thinking?"</p>
@@ -499,7 +518,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q3.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q3 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns3.png" alt="Q3 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">Trying to Settle. Tiptoe presses both feet flat on the floor. "Okay but… this helps me. What helps you calm down?"</p>
@@ -522,7 +541,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q4.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q4 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns4.png" alt="Q4 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">Comfort, Your Version. Nibbles holds up a snack with crumbs everywhere. "Comfort is subjective, okay. No judgement."</p>
@@ -545,7 +564,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q5.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q5 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns5.png" alt="Q5 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">When People Are Around. The void deck isn't empty anymore. A few people pass by. Someone sits nearby. Sniffy glances up. "When people are around and things feel weird… you usually?"</p>
@@ -568,7 +587,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q6.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q6 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns6.png" alt="Q6 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">The Thought That Loops. Everyone's sitting still now. No one's rushing to fix anything. Bug-Eye speaks softly.</p>
@@ -591,7 +610,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q7.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q7 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns7.png" alt="Q7 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">When It Gets Better. Time passes. Nothing changes, but somehow, it eases. Echo listens to the distance.</p>
@@ -614,7 +633,7 @@ body {
     </div>
     <div class="q-card">
       <span class="q-number">Q8.</span>
-      <div class="q-image-placeholder">image placeholder<br>Q8 illustration</div>
+      <div class="q-image-placeholder"><img src="graphics/microsite quiz qns8.png" alt="Q8 illustration"></div>
     </div>
     <div class="q-banner">
       <p class="q-story">Quiet Truth. They sit together, just existing. No pressure. No fixing.</p>
@@ -646,9 +665,9 @@ body {
         </svg>
         <!-- coloured circle -->
         <div class="result-circle" id="resultCircle">
-          <div class="result-cat-space"></div>
-          <span class="result-cat-name" id="resultCatName">—</span>
-        </div>
+        <span class="result-cat-name" id="resultCatName">—</span>
+</div>
+<img class="result-cat-img" id="resultCatImg" src="" alt="" style="display:none;">
       </div>
 
       <!-- text lines -->
@@ -671,11 +690,11 @@ let current = 0;
 const scores = { a: 0, b: 0, c: 0, d: 0, e: 0 };
 
 const RESULTS = {
-  a: { name: 'Echo',    color: '#e86518', nameClass: '',     line1: 'Sound does a lot for you.',             line2: 'More than most people realise.',        line3: 'You just make sense.' },
-  b: { name: 'Tip-Toe', color: '#4a3010', nameClass: '',     line1: 'Your body knows before your mind does.', line2: 'Movement and touch anchor you.',         line3: 'You just make sense.' },
-  c: { name: 'Nibbles', color: '#e8d898', nameClass: 'dark', line1: 'Taste and something familiar',           line2: 'is how you come home to yourself.',     line3: 'You just make sense.' },
-  d: { name: 'Sniffy',  color: '#3a6878', nameClass: '',     line1: 'Not because something\'s wrong..',       line2: 'but because that\'s how you cope.',     line3: 'You just make sense.' },
-  e: { name: 'Bug-eye', color: '#c0d4e4', nameClass: 'mid',  line1: 'What you see shapes how you feel.',      line2: 'Less input, more you.',                 line3: 'You just make sense.' },
+  a: { name: 'Echo',    color: '#e86518', nameClass: '', img: 'graphics/microsite quiz echo.png',      line1: 'Sound does a lot for you.',             line2: 'More than most people realise.',        line3: 'You just make sense.' },
+  b: { name: 'Tip-Toe', color: '#4a3010', nameClass: '',img: 'graphics/microsite quiz tiptoe.png',     line1: 'Your body knows before your mind does.', line2: 'Movement and touch anchor you.',         line3: 'You just make sense.' },
+  c: { name: 'Nibbles', color: '#e8d898', nameClass: 'dark', img: 'graphics/microsite quiz nibbles.png', line1: 'Taste and something familiar',           line2: 'is how you come home to yourself.',     line3: 'You just make sense.' },
+  d: { name: 'Sniffy',  color: '#3a6878', nameClass: '', img: 'graphics/microsite quiz sniffy.png',     line1: 'Not because something\'s wrong..',       line2: 'but because that\'s how you cope.',     line3: 'You just make sense.' },
+  e: { name: 'Bug-eye', color: '#c0d4e4', nameClass: 'mid',  img: 'graphics/microsite quiz bugeye.png',  line1: 'What you see shapes how you feel.',      line2: 'Less input, more you.',                 line3: 'You just make sense.' },
 };
 
 /* ── BACKGROUND CIRCLES ── */
@@ -786,6 +805,19 @@ function showResult() {
   const nameEl = document.getElementById('resultCatName');
   nameEl.textContent = res.name;
   nameEl.className = 'result-cat-name' + (res.nameClass ? ' ' + res.nameClass : '');
+  // set character image on top of circle
+  const imgEl = document.getElementById('resultCatImg');
+  if (res.img) {
+    imgEl.style.display = 'block';
+    imgEl.alt = res.name;
+    imgEl.onerror = () => {
+      console.error('❌ Image failed to load:', imgEl.src);
+      imgEl.style.display = 'none';
+    };
+    imgEl.src = res.img;
+  } else {
+    imgEl.style.display = 'none';
+  }
 
   // set text lines
   document.getElementById('resultLine1').textContent = res.line1;

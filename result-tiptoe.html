@@ -80,8 +80,8 @@ body {
 }
 
 /* medal placeholder (right of name) */
-.medal-placeholder {
-  width: 130px;
+medal-placeholder {
+  width: 170px;
   flex-shrink: 0;
   aspect-ratio: 3/4;
   border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
@@ -100,6 +100,14 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+.medal-placeholder img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  display: block;
+}
+
 /* ribbon tails under medal */
 .medal-placeholder::after {
   content: '';
@@ -311,6 +319,7 @@ body {
 const CHARS = {
   a: {
     name: 'Echo',
+    img: 'graphics/echomedal.png',
     theme: {
       bg: '#e86518',
       bgCircles: ['#f07828','#d05810','#f89050','#e07030','#c84808','#faa060','#d86020'],
@@ -331,6 +340,7 @@ const CHARS = {
   },
   b: {
     name: 'Tip-Toe',
+    img: 'graphics/tiptoemedal.png',
     theme: {
       bg: '#8a7450',
       bgCircles: ['#9a8460','#7a6440','#b09878','#6a5430','#c0a888','#706040','#a08868'],
@@ -351,6 +361,7 @@ const CHARS = {
   },
   c: {
     name: 'Nibbles',
+    img: 'graphics/nibblesmedal.png',
     theme: {
       bg: '#f0e4a0',
       bgCircles: ['#e8d888','#d8c878','#f8f0b8','#c8b860','#e0d090','#b8a850','#f0e8a8'],
@@ -371,6 +382,7 @@ const CHARS = {
   },
   d: {
     name: 'Sniffy',
+    img: 'graphics/sniffymedal.png',
     theme: {
       bg: '#607880',
       bgCircles: ['#708890','#506870','#809898','#405860','#8aaaaa','#304850','#70909a'],
@@ -391,6 +403,7 @@ const CHARS = {
   },
   e: {
     name: 'Bug-Eye',
+    img: 'graphics/bugeyemedal.png',
     theme: {
       bg: '#b8ccd8',
       bgCircles: ['#a8c0cc','#98b0bc','#c8dce8','#88a0ac','#d8ecf8','#789098','#b0c8d4'],
