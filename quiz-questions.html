@@ -9,12 +9,12 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  width: 100%;
-  min-height: 100vh;
+  
   background: #8aa8b8;
   display: flex;
   justify-content: center;
-  font-family: 'Caveat', cursive;
+  font-family: 'Agrandir - Free For Personal Use/Agrandir-GrandLight.otf', monospace;
+  font-size: 17px;
 }
 
 #phone {
@@ -183,9 +183,9 @@ body {
   border: none;
   border-radius: 30px;
   padding: 11px 14px;
-  font-family: 'Caveat', cursive;
-  font-size: 17px;
-  font-weight: 600;
+  font-family: 'Agrandir - Free For Personal Use/Agrandir-GrandLight.otf', monospace;
+  font-size: 13px;
+  font-weight: 500px;
   color: #e86518;
   cursor: pointer;
   text-align: center;
@@ -340,8 +340,8 @@ body {
   padding: 0 10px;
 }
 .result-line {
-  font-family: 'Caveat', cursive;
-  font-size: 23px;
+  font-family: 'Agrandir - Free For Personal Use/Agrandir-GrandLight.otf', monospace;
+  font-size: 17px;
   font-weight: 500;
   color: #c86010;
   text-align: center;
@@ -659,7 +659,7 @@ body {
           <defs>
             <path id="arcPath" d="M 140,140 m -122,0 a 122,122 0 1,1 244,0"/>
           </defs>
-          <text font-family="'Caveat', cursive" font-size="17" fill="#e86518" font-weight="700" letter-spacing="1">
+          <text font-family="'Agrandir - Free For Personal Use/Agrandir-GrandLight.otf', monospace" font-size="12" fill="#e86518" font-weight="700" letter-spacing="1">
             <textPath href="#arcPath" startOffset="4%">So... this sense just does more for you</textPath>
           </text>
         </svg>
@@ -690,7 +690,7 @@ let current = 0;
 const scores = { a: 0, b: 0, c: 0, d: 0, e: 0 };
 
 const RESULTS = {
-  a: { name: 'Echo',    color: '#e86518', nameClass: '', img: 'graphics/microsite quiz echo.png',      line1: 'Sound does a lot for you.',             line2: 'More than most people realise.',        line3: 'You just make sense.' },
+  a: { name: 'Echo',    color: '#e86518', nameClass: '', img: 'graphics/microsite quiz echo.png',      line1: 'Sound does a lot for you.',             line2: 'More than most people realise.',        line3: 'You just make sense.', },
   b: { name: 'Tip-Toe', color: '#4a3010', nameClass: '',img: 'graphics/microsite quiz tiptoe.png',     line1: 'Your body knows before your mind does.', line2: 'Movement and touch anchor you.',         line3: 'You just make sense.' },
   c: { name: 'Nibbles', color: '#e8d898', nameClass: 'dark', img: 'graphics/microsite quiz nibbles.png', line1: 'Taste and something familiar',           line2: 'is how you come home to yourself.',     line3: 'You just make sense.' },
   d: { name: 'Sniffy',  color: '#3a6878', nameClass: '', img: 'graphics/microsite quiz sniffy.png',     line1: 'Not because something\'s wrong..',       line2: 'but because that\'s how you cope.',     line3: 'You just make sense.' },
