@@ -225,57 +225,38 @@ body {
 .footer {
   position: relative;
   z-index: 2;
+  background: #fff;
+  padding: 14px 16px;
+  margin-top: 8px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
-  margin-top: 8px;
-  border-top-width: 1.5px;
-  border-top-style: solid;
   gap: 10px;
   opacity: 0;
   animation: fadeUp 0.4s ease 1.1s forwards;
 }
-.footer-logos {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.logo-box {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  line-height: 1.5;
-  padding: 4px 6px;
-  border-radius: 4px;
-  border-width: 1px;
-  border-style: solid;
-}
-.footer-center {
+.footer-img {
   flex: 1;
-  text-align: center;
+  width: 100%;
+  max-height: 30px;
+  object-fit: contain;
+  display: inline-block;
 }
-.footer-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
-  line-height: 1.6;
-}
-.footer-sub {
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-.share-btn {
-  width: 36px; height: 36px;
+.share-btn-img {
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
-  border-width: 1.5px;
-  border-style: solid;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 18px;
+  color: #333;
   cursor: pointer;
-  background: transparent;
   flex-shrink: 0;
+}
+.share-btn-img:hover {
+  background: rgba(0,0,0,0.05);
 }
 
 /* ── KEYFRAMES ── */
@@ -500,17 +481,10 @@ page.innerHTML = `
   </div>
 
   <!-- FOOTER -->
-  <div class="footer" style="border-top-color:${T.footerBorder};">
-    <div class="footer-logos">
-      <div class="logo-box" style="color:${T.footerText}; border-color:${T.footerBorder};">ACD<br>R4E</div>
-      <div class="logo-box" style="color:${T.footerText}; border-color:${T.footerBorder};">×<br>SAMH</div>
-    </div>
-    <div class="footer-center">
-      <div class="footer-title" style="color:${T.footerText};">'LETS TAKE 5'</div>
-      <div class="footer-sub" style="color:${T.footerText}; opacity:0.8;">Psychosis Awareness Campaign<br>1 Sep 2025 – 28 Nov 2025</div>
-    </div>
-    <button class="share-btn" style="border-color:${T.footerBorder}; color:${T.footerText};" onclick="share()">↑</button>
-  </div>
+  <div class="footer">
+  <img class="footer-img" src="graphics/microsite quiz footer.png" alt="Let's Take 5 — Psychosis Awareness Campaign">
+  <button class="share-btn-img" onclick="share()">↑</button>
+</div>
 `;
 
 /* ── MEDAL BOB after entry ── */
