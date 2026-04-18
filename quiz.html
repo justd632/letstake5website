@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Feeline Personality Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  background: #c8b8a8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+}
+
+#phone {
+  position: relative;
+  width: 393px;
+  height: 852px;
+  overflow: hidden;
+  flex-shrink: 0;
+  /* soft peach border like reference */
+  outline: 10px solid #e8c8b0;
+  background: #f0ece4;
+}
+
+/* ── BACKGROUND CIRCLES canvas ── */
+#bgCanvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 390px;
+  height: 844px;
+  display: block;
+}
+
+/* ── SUBTITLE TEXT ── */
+.subtitle {
+  position: absolute;
+  top: 52px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: #e86518;
+  letter-spacing: 0.5px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── ROSETTE WRAPPER ── */
+#rosette-wrap {
+  position: absolute;
+  top: 170px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── IDLE BOB ANIMATION ── */
+@keyframes rosetteBob {
+  0%,100% { transform: translateX(-50%) translateY(0px);   }
+  50%      { transform: translateX(-50%) translateY(-10px); }
+}
+@keyframes rosetteHover {
+  0%,100% { transform: translateX(-50%) translateY(0px) scale(1.06) rotate(-1deg); }
+  25%      { transform: translateX(-50%) translateY(-8px) scale(1.07) rotate(1.5deg); }
+  75%      { transform: translateX(-50%) translateY(-4px) scale(1.065) rotate(-1.5deg); }
+}
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes ringRotateFast {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes startPulse {
+  0%,100% { letter-spacing: 4px; text-shadow: 2px 2px 0 #a06000; }
+  50%      { letter-spacing: 7px; text-shadow: 3px 3px 0 #c07800, 0 0 16px rgba(255,180,60,0.5); }
+}
+@keyframes ribbonWave {
+  0%,100% { transform: skewX(0deg) scaleY(1); }
+  30%      { transform: skewX(3deg) scaleY(1.02); }
+  70%      { transform: skewX(-3deg) scaleY(1.02); }
+}
+@keyframes pressDown {
+  0%   { transform: translateX(-50%) scale(1); }
+  40%  { transform: translateX(-50%) scale(0.94) translateY(6px); }
+  70%  { transform: translateX(-50%) scale(1.02) translateY(-2px); }
+  100% { transform: translateX(-50%) scale(1) translateY(0); }
+}
+@keyframes sparkleOut {
+  0%   { transform: scale(0) rotate(0deg);   opacity: 1; }
+  60%  { transform: scale(1.4) rotate(200deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg);  opacity: 0; }
+}
+@keyframes catBounce {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-5px); }
+}
+
+/* idle animation */
+#rosette-wrap { animation: rosetteBob 2.8s ease-in-out infinite; }
+#rosette-wrap:hover { animation: rosetteHover 1.4s ease-in-out infinite; }
+#rosette-wrap:active { animation: pressDown 0.35s ease forwards; }
+
+#outer-ring-svg {
+  animation: ringRotate 12s linear infinite;
+}
+#rosette-wrap:hover #outer-ring-svg {
+  animation: ringRotateFast 3s linear infinite;
+}
+
+.start-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 22px;
+  color: #f5e898;
+  animation: startPulse 1.8s ease-in-out infinite;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.ribbon-svg {
+  animation: ribbonWave 2.8s ease-in-out infinite;
+  transform-origin: top center;
+}
+#rosette-wrap:hover .ribbon-svg {
+  animation: ribbonWave 0.9s ease-in-out infinite;
+}
+
+.sparkle-el {
+  position: absolute;
+  font-size: 16px;
+  pointer-events: none;
+  z-index: 20;
+  animation: sparkleOut 0.65s ease-out forwards;
+  user-select: none;
+}
+</style>
+</head>
+<body>
+<div id="phone">
+
+  <!-- ── BACKGROUND ── -->
+  <canvas id="bgCanvas" width="393" height="852"></canvas>
+
+  <!-- ── SUBTITLE ── -->
+  <p class="subtitle">Find out your most dominant sense.</p>
+
+  <!-- ── ROSETTE + RIBBONS ── -->
+  <div id="rosette-wrap" onclick="handleStart(event)">
+
+    <!-- ROSETTE DISC -->
+    <svg style="position:relative; z-index:9; display:block;"
+      width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- cream outer disc -->
+      <circle cx="150" cy="150" r="148" fill="#f0ece0" stroke="#e8c898" stroke-width="2"/>
+
+      <!-- rotating text ring -->
+      <g id="outer-ring-svg" style="transform-origin:150px 150px;">
+        <defs>
+          <path id="textCircle" d="M 150,150 m -118,0 a 118,118 0 1,1 236,0 a 118,118 0 1,1 -236,0"/>
+        </defs>
+        <text font-family="'Press Start 2P', monospace" font-size="13.5" fill="#e86518" letter-spacing="8">
+          <textPath href="#textCircle" startOffset="0%">
+            What Are You Feeline Right Now? ✦
+          </textPath>
+        </text>
+      </g>
+
+      <!-- dark brown ring -->
+      <circle cx="150" cy="150" r="100" fill="#5a3010"/>
+
+      <!-- orange centre -->
+      <circle cx="150" cy="150" r="80" fill="#e86518"/>
+
+      <!-- START centred in SVG -->
+      <text x="150" y="158" text-anchor="middle" dominant-baseline="middle"
+        font-family="'Press Start 2P', monospace" font-size="22"
+        fill="#f5e898" letter-spacing="4">START</text>
+    </svg>
+
+    <!-- no separate START overlay needed -->
+
+    <!-- RIBBONS directly below disc -->
+    <svg class="ribbon-svg" style="display:block; position:relative; z-index:8; margin-top:-10px;"
+      width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- left ribbon tail -->
+      <polygon points="40,0 110,0 85,220 0,185"   fill="#e86518"/>
+      <polygon points="62,0 98,0  78,220 44,185"  fill="#5a3010"/>
+      <!-- right ribbon tail -->
+      <polygon points="110,0 180,0 220,185 135,220" fill="#e86518"/>
+      <polygon points="122,0 158,0 176,185 142,220" fill="#5a3010"/>
+      <!-- cream centre stripe -->
+      <polygon points="97,0 123,0 118,220 102,220" fill="#f0ece0" opacity="0.45"/>
+    </svg>
+
+  </div><!-- /#rosette-wrap -->
+
+</div><!-- /#phone -->
+
+<script>
+/* ── Draw background circles ── */
+(function() {
+  const c = document.getElementById('bgCanvas');
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#f0ece4';
+  ctx.fillRect(0, 0, 390, 844);
+
+  const circles = [
+    { x:  -30, y:  40, r: 120, colors: ['#c8b898','#e0ceb0','#f0e8d0'] },
+    { x:  260, y:  -20, r: 110, colors: ['#b8c8d4','#ccdae4','#deeaf2'] },
+    { x:   60, y: 180, r: 150, colors: ['#c8b898','#ddd0b8','#f0e8d4'] },
+    { x:  310, y: 200, r:  90, colors: ['#b8c8d4','#ccdae4'] },
+    { x: -20,  y: 400, r: 130, colors: ['#c8b898','#ddd0b8'] },
+    { x: 310,  y: 430, r: 100, colors: ['#b8c8d4','#dde8f0'] },
+    { x: 140,  y: 550, r: 160, colors: ['#c8b898','#e0d0b8','#f0e8d4'] },
+    { x: -40,  y: 680, r: 100, colors: ['#b8c8d4','#ccdae4'] },
+    { x: 340,  y: 720, r: 120, colors: ['#c8b898','#ddd0b8'] },
+  ];
+
+  circles.forEach(({ x, y, r, colors }) => {
+    // draw concentric rings
+    const rings = 3;
+    for (let i = rings; i >= 0; i--) {
+      ctx.beginPath();
+      ctx.arc(x, y, r * (1 - i * 0.22), 0, Math.PI * 2);
+      ctx.fillStyle = colors[Math.min(i, colors.length - 1)];
+      ctx.fill();
+    }
+  });
+})();
+
+/* ── Sparkle on click ── */
+const STARS = ['✦','✧','★','✨','◆','⭐'];
+function spawnSparkles() {
+  const wrap = document.getElementById('rosette-wrap');
+  const phone = document.getElementById('phone');
+  const wr = wrap.getBoundingClientRect();
+  const pr = phone.getBoundingClientRect();
+  const cx = (wr.left - pr.left) + wr.width / 2;
+  const cy = (wr.top  - pr.top)  + 150; // centre of rosette disc
+  for (let i = 0; i < 10; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle-el';
+    s.textContent = STARS[Math.floor(Math.random() * STARS.length)];
+    const angle = (Math.PI * 2 / 10) * i + Math.random() * 0.3;
+    const dist  = 130 + Math.random() * 50;
+    s.style.left  = (cx + Math.cos(angle) * dist - 8) + 'px';
+    s.style.top   = (cy + Math.sin(angle) * dist - 8) + 'px';
+    s.style.color = ['#e86518','#ffaa40','#ff6030','#ffd060','#7ac8e8','#f0d080'][Math.floor(Math.random()*6)];
+    s.style.animationDelay = (i * 0.05) + 's';
+    phone.appendChild(s);
+    setTimeout(() => s.remove(), 750);
+  }
+}
+
+function handleStart(e) {
+  e.preventDefault();
+  spawnSparkles();
+  // navigate after short delay
+  setTimeout(() => {
+    window.location.href = 'quiz-questions.html';
+  }, 400);
+}
+</script>
+</body>
+</html>

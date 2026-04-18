@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Let's Take 5 — Choose</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="phone">
+
+  <!-- TILE CANVASES -->
+  <div class="half half-top">
+    <canvas id="tilesTop" width="393" height="426"></canvas>
+  </div>
+  <div class="half half-bottom">
+    <canvas id="tilesBot" width="393" height="426"></canvas>
+  </div>
+
+  <!-- ══ QUIZ BUTTON ══ -->
+  <a class="choice-btn btn-quiz" href="quiz.html" id="btnQuiz">
+    <span>Feeline Personality Quiz</span>
+  </a>
+
+  <!-- ══ LETTER BUTTON ══ -->
+  <a class="choice-btn btn-letter" href="#" id="btnLetter">
+    <span>Reflection Letter</span>
+  </a>
+
+  <!-- ══ CAT on quiz button ══ -->
+  <div class="deco" style="right:46px; top:128px; width:118px;">
+    <svg viewBox="0 0 118 120" xmlns="">
+      <!-- beret -->
+      <ellipse cx="62" cy="22" rx="28" ry="11" fill="#c85010"/>
+      <ellipse cx="62" cy="18" rx="24" ry="9"  fill="#e06828"/>
+      <circle  cx="62" cy="12" r="5"           fill="#c85010"/>
+      <!-- ears -->
+      <polygon points="38,48 28,22 52,38" fill="#ede8c0" stroke="#c8c090" stroke-width="1.2"/>
+      <polygon points="80,46 84,20 66,36" fill="#ede8c0" stroke="#c8c090" stroke-width="1.2"/>
+      <polygon points="40,46 32,26 50,38" fill="#f5f0d8"/>
+      <polygon points="78,45 82,24 68,36"  fill="#f5f0d8"/>
+      <!-- head -->
+      <ellipse cx="58" cy="66" rx="36" ry="32" fill="#f0ebd0" stroke="#c8c090" stroke-width="1.5"/>
+      <!-- button eyes -->
+      <circle cx="43" cy="61" r="11" fill="#d0d0c0" stroke="#888870" stroke-width="1.5"/>
+      <circle cx="73" cy="61" r="11" fill="#d0d0c0" stroke="#888870" stroke-width="1.5"/>
+      <circle cx="43" cy="61" r="5"  fill="#555548"/>
+      <circle cx="73" cy="61" r="5"  fill="#555548"/>
+      <circle cx="40" cy="58" r="1.3" fill="#888870"/>
+      <circle cx="46" cy="58" r="1.3" fill="#888870"/>
+      <circle cx="40" cy="64" r="1.3" fill="#888870"/>
+      <circle cx="46" cy="64" r="1.3" fill="#888870"/>
+      <circle cx="70" cy="58" r="1.3" fill="#888870"/>
+      <circle cx="76" cy="58" r="1.3" fill="#888870"/>
+      <circle cx="70" cy="64" r="1.3" fill="#888870"/>
+      <circle cx="76" cy="64" r="1.3" fill="#888870"/>
+      <!-- nose -->
+      <ellipse cx="58" cy="74" rx="4" ry="3" fill="#c8a888"/>
+      <!-- whiskers -->
+      <line x1="18" y1="72" x2="48" y2="75" stroke="#c0b888" stroke-width="1" opacity="0.8"/>
+      <line x1="18" y1="78" x2="47" y2="78" stroke="#c0b888" stroke-width="1" opacity="0.8"/>
+      <line x1="68" y1="75" x2="98" y2="72" stroke="#c0b888" stroke-width="1" opacity="0.8"/>
+      <line x1="69" y1="78" x2="98" y2="78" stroke="#c0b888" stroke-width="1" opacity="0.8"/>
+      <!-- rosette medal -->
+      <circle cx="82" cy="90" r="10" fill="#d8d8c8" stroke="#888870" stroke-width="1.2"/>
+      <circle cx="82" cy="90" r="5.5" fill="#888870"/>
+      <circle cx="80" cy="88" r="1.1" fill="#bbb8a0"/>
+      <circle cx="84" cy="88" r="1.1" fill="#bbb8a0"/>
+      <circle cx="80" cy="92" r="1.1" fill="#bbb8a0"/>
+      <circle cx="84" cy="92" r="1.1" fill="#bbb8a0"/>
+      <!-- ribbon -->
+      <rect x="78" y="98" width="4" height="12" rx="1" fill="#c05018" transform="rotate(-10,80,98)"/>
+      <rect x="82" y="98" width="4" height="12" rx="1" fill="#7aa8c0" transform="rotate(10,84,98)"/>
+    </svg>
+  </div>
+
+  <!-- ══ ENVELOPE on letter button ══ -->
+  <div class="deco" style="left:12px; top:526px; width:128px;">
+    <svg viewBox="0 0 128 140" xmlns="">
+      <!-- back envelope cream tilted -->
+      <g transform="rotate(-18,64,70)">
+        <rect x="24" y="18" width="78" height="60" rx="4" fill="#f0ead8" stroke="#c0a878" stroke-width="1.2"/>
+        <polygon points="24,18 102,18 63,44" fill="#d8c8a8"/>
+      </g>
+      <!-- mid envelope blue tilted -->
+      <g transform="rotate(-8,64,70)">
+        <rect x="16" y="30" width="80" height="62" rx="4" fill="#7aaac8" stroke="#4a7a98" stroke-width="1.5"/>
+        <polygon points="16,30 96,30 56,56" fill="#5888a8"/>
+      </g>
+      <!-- front envelope brown -->
+      <g transform="rotate(6,60,80)">
+        <rect x="8" y="44" width="82" height="64" rx="4" fill="#c07840" stroke="#8a5520" stroke-width="1.5"/>
+        <polygon points="8,44 90,44 49,70" fill="#9a5c28"/>
+        <!-- crinkle lines -->
+        <line x1="18" y1="64" x2="52" y2="78" stroke="#8a5520" stroke-width="1" opacity="0.4"/>
+        <line x1="18" y1="74" x2="55" y2="88" stroke="#8a5520" stroke-width="1" opacity="0.3"/>
+        <!-- wax seal -->
+        <circle cx="46" cy="88" r="11" fill="#d05818" stroke="#903808" stroke-width="1.2"/>
+        <!-- star inside seal -->
+        <polygon points="46,79 48,85 55,85 49,89 51,96 46,92 41,96 43,89 37,85 44,85"
+          fill="#f08840" opacity="0.9"/>
+      </g>
+    </svg>
+  </div>
+
+</div><!-- /#phone -->
+
+<script>
+/* ── Mosaic tile painter ── */
+function drawMosaic(id, colors) {
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  const tile = 44, gap = 5, step = tile + gap;
+  const cols = Math.ceil(c.width  / step) + 1;
+  const rows = Math.ceil(c.height / step) + 1;
+  for (let r = 0; r < rows; r++) {
+    for (let k = 0; k < cols; k++) {
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.beginPath();
+      ctx.roundRect(k * step, r * step, tile, tile, 3);
+      ctx.fill();
+    }
+  }
+}
+
+drawMosaic('tilesTop', [
+  '#a4c4d8','#8db4cc','#78a8c0','#94bece',
+  '#b6d2e4','#66a0bc','#bdd4e4','#7eaecc','#5890b0','#c8dde8'
+]);
+drawMosaic('tilesBot', [
+  '#d8a07a','#c88858','#e0b090','#c87848',
+  '#d9a880','#b86840','#e8c0a0','#c09070','#b87858','#d4906a'
+]);
+
+/* ── Sparkle burst ── */
+const STARS = ['✦','✧','⭐','★','✨','◆','♦'];
+function spawnSparkles(btn) {
+  const rect = btn.getBoundingClientRect();
+  const phoneRect = document.getElementById('phone').getBoundingClientRect();
+  for (let i = 0; i < 6; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = STARS[Math.floor(Math.random() * STARS.length)];
+    const angle = (Math.PI * 2 / 6) * i + (Math.random() * 0.4);
+    const dist = 55 + Math.random() * 30;
+    const cx = (rect.left - phoneRect.left) + rect.width / 2;
+    const cy = (rect.top  - phoneRect.top)  + rect.height / 2;
+    s.style.left   = (cx + Math.cos(angle) * dist - 7) + 'px';
+    s.style.top    = (cy + Math.sin(angle) * dist - 7) + 'px';
+    s.style.color  = ['#e86518','#ffaa40','#ff6030','#ffd060','#7ac8e8'][Math.floor(Math.random()*5)];
+    s.style.animationDelay = (i * 0.06) + 's';
+    document.getElementById('phone').appendChild(s);
+    setTimeout(() => s.remove(), 700);
+  }
+}
+
+/* ── Button interactions ── */
+function initBtn(id) {
+  const el = document.getElementById(id);
+  let sparkleTimer = null;
+
+  el.addEventListener('mouseenter', () => {
+    spawnSparkles(el);
+    sparkleTimer = setInterval(() => spawnSparkles(el), 900);
+  });
+  el.addEventListener('mouseleave', () => {
+    clearInterval(sparkleTimer);
+  });
+
+  el.addEventListener('click', function(e) {
+    const href = el.getAttribute('href');
+    if (!href || href === '#') {
+      e.preventDefault();
+    }
+    clearInterval(sparkleTimer);
+    el.classList.remove('bounce');
+    void el.offsetWidth; // reflow
+    el.classList.add('pressed');
+    spawnSparkles(el);
+    setTimeout(() => {
+      el.classList.remove('pressed');
+      el.classList.add('bounce');
+    }, 200);
+    setTimeout(() => el.classList.remove('bounce'), 650);
+  });
+}
+
+initBtn('btnQuiz');
+initBtn('btnLetter');
+</script>
+</body>
+</html>

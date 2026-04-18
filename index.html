@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Let's Take 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="phone">
+<!-- ════ BUILDINGS ════ -->
+<div class="building bld-tl">
+  <div class="windows">
+    <div class="win-row"></div>
+    <div class="win-row"></div>
+    <div class="win-row"></div>
+    <div class="win-row"></div>
+  </div>
+</div>
+
+<div class="building bld-rm">
+  <div class="windows">
+    <div class="win-row"></div>
+    <div class="win-row"></div>
+    <div class="win-row"></div>
+    <div class="win-row" style="width:50%; margin-left:10px;"></div>
+    <div style="position:relative; height:36px;">
+      <div class="win-small" style="left:8px; top:0;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="building bld-bc">
+  <div class="win-small" style="top:30px; left:18px;"></div>
+  <div class="win-small" style="top:30px; left:58px;"></div>
+  <div class="win-small" style="top:80px; left:18px;"></div>
+  <div class="win-small" style="top:80px; left:58px;"></div>
+  <div class="win-small" style="top:130px; left:38px;"></div>
+</div>
+
+
+<!-- ════ CATS (real images) ════ -->
+
+<!-- White striped cat — top right, peeking in from right edge -->
+<img class="cat"
+  src="Untitled design.png"
+  alt="white cat"
+  style="right:-90px; top:30px; width:260px; pointer-events:none;"/>
+
+<!-- Blue cat — right side, mid screen, peeking in from right edge -->
+<img class="cat"
+  src="Untitled design (1).png"
+  alt="blue cat"
+  style="right: -80px; top:310px; width:240px; pointer-events:none;"/>
+
+
+<!-- ════ TITLE ════ -->
+<div class="title-wrap">
+  <span class="title-line">Let's</span>
+  <span class="title-line">Take</span>
+</div>
+
+
+<!-- ════ BIG 5 BUTTON ════ -->
+<a class="btn-wrap" id="startBtn" href="start.html" onclick="goStart(event)" role="button" aria-label="Press to start">
+  <div class="btn-inner">
+  <svg class="oval-svg" width="220" height="180" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+    <!-- hand-drawn oval ring 1 -->
+    <ellipse class="oval-ring" cx="110" cy="88" rx="88" ry="72"
+      fill="#ddeef5" fill-opacity="0.55"
+      stroke="#e86518" stroke-width="3.5"
+      stroke-dasharray="12 5"
+      stroke-linecap="round"
+      transform="rotate(-4, 110, 88)"/>
+    <!-- hand-drawn oval ring 2 (offset for sketch feel) -->
+    <ellipse cx="112" cy="90" rx="84" ry="68"
+      fill="none"
+      stroke="#7a4e1e" stroke-width="2"
+      stroke-dasharray="18 8 6 8"
+      stroke-linecap="round"
+      transform="rotate(3, 112, 90)"/>
+    <!-- ripple placeholder -->
+    <circle id="rippleEl" cx="110" cy="88" r="0" fill="none" stroke="#e86518" stroke-width="2" opacity="0"/>
+  </svg>
+  <!-- Pixel 5 overlaid -->
+  <div class="pixel-5">5</div>
+  <div class="press-label">Press to Start</div>
+  </div>
+</a>
+
+
+<!-- ════ FLOWERS ════ -->
+<div class="flowers">
+  <svg width="100%" height="110" viewBox="0 0 400 110" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <!-- grass clumps -->
+    <path d="M 0 90 Q 10 60 20 90 Q 30 60 40 90 Q 50 60 60 90" stroke="#7a9858" stroke-width="2.5" fill="none"/>
+    <path d="M 50 95 Q 60 65 70 95 Q 80 65 90 95" stroke="#7a9858" stroke-width="2.5" fill="none"/>
+    <path d="M 330 90 Q 340 60 350 90 Q 360 60 370 90 Q 380 60 390 90" stroke="#7a9858" stroke-width="2.5" fill="none"/>
+    <!-- stems -->
+    <line x1="80" y1="108" x2="80" y2="70" stroke="#7a9858" stroke-width="2"/>
+    <line x1="130" y1="108" x2="130" y2="68" stroke="#7a9858" stroke-width="2"/>
+    <line x1="175" y1="108" x2="175" y2="72" stroke="#7a9858" stroke-width="2"/>
+    <line x1="220" y1="108" x2="220" y2="65" stroke="#7a9858" stroke-width="2"/>
+    <line x1="265" y1="108" x2="265" y2="70" stroke="#7a9858" stroke-width="2"/>
+    <line x1="310" y1="108" x2="310" y2="68" stroke="#7a9858" stroke-width="2"/>
+    <!-- tulip flowers: blue-grey -->
+    <ellipse cx="80" cy="65" rx="9" ry="13" fill="#8ab0c0" stroke="#6090a8" stroke-width="1.2"/>
+    <ellipse cx="80" cy="58" rx="6" ry="9" fill="#6090a8"/>
+    <ellipse cx="175" cy="67" rx="9" ry="13" fill="#8ab0c0" stroke="#6090a8" stroke-width="1.2"/>
+    <ellipse cx="175" cy="60" rx="6" ry="9" fill="#6090a8"/>
+    <ellipse cx="265" cy="65" rx="9" ry="13" fill="#8ab0c0" stroke="#6090a8" stroke-width="1.2"/>
+    <ellipse cx="265" cy="58" rx="6" ry="9" fill="#6090a8"/>
+    <!-- tulips: yellow -->
+    <ellipse cx="130" cy="63" rx="9" ry="13" fill="#e8d870" stroke="#c0b040" stroke-width="1.2"/>
+    <ellipse cx="130" cy="56" rx="6" ry="9" fill="#c8b840"/>
+    <ellipse cx="220" cy="60" rx="9" ry="13" fill="#e8d870" stroke="#c0b040" stroke-width="1.2"/>
+    <ellipse cx="220" cy="53" rx="6" ry="9" fill="#c8b840"/>
+    <ellipse cx="310" cy="63" rx="9" ry="13" fill="#e8d870" stroke="#c0b040" stroke-width="1.2"/>
+    <ellipse cx="310" cy="56" rx="6" ry="9" fill="#c8b840"/>
+    <!-- leaves -->
+    <path d="M 80 84 Q 68 78 72 70" stroke="#7a9858" stroke-width="1.8" fill="none"/>
+    <path d="M 130 82 Q 142 76 138 68" stroke="#7a9858" stroke-width="1.8" fill="none"/>
+    <path d="M 175 84 Q 163 78 167 70" stroke="#7a9858" stroke-width="1.8" fill="none"/>
+    <path d="M 220 82 Q 232 76 228 68" stroke="#7a9858" stroke-width="1.8" fill="none"/>
+    <path d="M 265 84 Q 253 78 257 70" stroke="#7a9858" stroke-width="1.8" fill="none"/>
+    <path d="M 310 82 Q 322 76 318 68" stroke="#7a9858" stroke-width="1.8" fill="none"/>
+    <!-- ground strip -->
+    <rect x="0" y="100" width="400" height="10" fill="#8aaa68" rx="0"/>
+  </svg>
+</div>
+
+
+</div><!-- /#phone -->
+
+<script>
+function goStart(e) {
+  e.preventDefault();
+  const btn = document.getElementById('startBtn');
+  const ripple = document.getElementById('rippleEl');
+
+  // animate ripple
+  ripple.setAttribute('r', '10');
+  ripple.setAttribute('opacity', '0.6');
+  ripple.style.animation = 'none';
+  void ripple.offsetWidth;
+  ripple.style.animation = 'ripple 0.5s ease-out forwards';
+
+  // brief delay then navigate
+  setTimeout(() => {
+    window.location.href = 'start.html';
+  }, 400);
+}
+</script>
+
+</body>
+</html>

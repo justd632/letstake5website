@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Take 5 - QR Code</title>
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin: 0 0 30px 0;
+            font-size: 24px;
+        }
+        
+        #qrcode {
+            margin: 20px 0;
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            color: #666;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #764ba2;
+        }
+        
+        .url-display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            word-break: break-all;
+            font-size: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <h1>Let's Take 5</h1>
+        <p style="font-size: 14px; color: #666; margin: 0 0 20px 0;">Scan to Play!</p>
+        
+        <div id="qrcode"></div>
+        
+        <div class="url-display" id="urlDisplay">
+            Loading...
+        </div>
+        
+        <div class="button-group">
+            <button onclick="downloadQR()">Download QR Code</button>
+            <button onclick="goToQuiz()">Start Quiz</button>
+        </div>
+        
+        <div class="instructions">
+            <p><strong>📱 How to use:</strong></p>
+            <p>1. Scan the QR code with your phone camera</p>
+            <p>2. You'll be taken directly to the quiz</p>
+            <p>3. Share the QR code with others to play!</p>
+        </div>
+    </div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script>
+        // Get the current page URL (without the qr-code.html part)
+        const currentURL = window.location.origin + window.location.pathname.replace('qr-code.html', '') + 'start.html';
+        
+        // Display the URL
+        document.getElementById('urlDisplay').textContent = 'QR Code points to: ' + currentURL;
+        
+        // Generate QR code
+        const qrcode = new QRCode(document.getElementById('qrcode'), {
+            text: currentURL,
+            width: 300,
+            height: 300,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        
+        // Download QR code as image
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'letstake5-qrcode.png';
+            link.click();
+        }
+        
+        // Go to quiz
+        function goToQuiz() {
+            window.location.href = 'start.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Your Feeline Result</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #888;
+  font-family: 'Caveat', cursive;
+}
+
+#phone {
+  position: relative;
+  width: 390px;
+  min-height: 844px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+#phone::-webkit-scrollbar { display: none; }
+
+/* ── BG CANVAS ── */
+#bgCanvas {
+  position: fixed;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 390px;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── ALL CONTENT ── */
+.page {
+  position: relative;
+  z-index: 1;
+  padding: 36px 18px 0;
+}
+
+/* ── TOP ROW: name box + medal ── */
+.top-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 22px;
+  opacity: 0;
+  animation: slideInLeft 0.55s cubic-bezier(.34,1.28,.64,1) 0.1s forwards;
+}
+.name-block {
+  flex: 1;
+}
+.you-are-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.char-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 26px;
+  line-height: 1.2;
+  display: block;
+  letter-spacing: 1px;
+}
+.name-box {
+  border-radius: 12px;
+  border-width: 2.5px;
+  border-style: solid;
+  padding: 14px 18px 16px;
+}
+
+/* medal placeholder (right of name) */
+.medal-placeholder {
+  width: 130px;
+  flex-shrink: 0;
+  aspect-ratio: 3/4;
+  border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+  border-width: 2px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  text-align: center;
+  line-height: 1.8;
+  padding: 10px;
+  opacity: 0;
+  animation: slideInRight 0.55s cubic-bezier(.34,1.28,.64,1) 0.2s forwards;
+  position: relative;
+  overflow: hidden;
+}
+/* ribbon tails under medal */
+.medal-placeholder::after {
+  content: '';
+  position: absolute;
+  bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  width: 60px; height: 40px;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+}
+
+/* ── MOTTO ── */
+.motto-section {
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.35s forwards;
+}
+.motto-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  display: block;
+}
+.motto-text {
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-align: center;
+  border-width: 1.5px;
+  border-style: solid;
+}
+
+/* ── KEY SENSES ── */
+.senses-section {
+  margin-bottom: 28px;
+  text-align: center;
+}
+.senses-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+  display: block;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.5s forwards;
+}
+.senses-pills {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sense-pill {
+  border-radius: 50px;
+  padding: 10px 18px;
+  font-size: 17px;
+  font-weight: 600;
+  border-width: 2px;
+  border-style: solid;
+  opacity: 0;
+  white-space: nowrap;
+}
+.sense-pill:nth-child(1) { animation: popIn 0.45s cubic-bezier(.34,1.56,.64,1) 0.58s forwards; }
+.sense-pill:nth-child(2) { animation: popIn 0.45s cubic-bezier(.34,1.56,.64,1) 0.68s forwards; }
+.sense-pill:nth-child(3) { animation: popIn 0.45s cubic-bezier(.34,1.56,.64,1) 0.78s forwards; }
+
+/* ── PROFILE SECTION ── */
+.profile-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 0;
+  padding-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.55s ease 0.85s forwards;
+}
+.profile-left { display: flex; flex-direction: column; gap: 10px; }
+.profile-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  display: block;
+  text-align: center;
+}
+.profile-text-box {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.55;
+  text-align: center;
+  flex: 1;
+  border-width: 1.5px;
+  border-style: solid;
+}
+.profile-right { display: flex; flex-direction: column; gap: 9px; }
+.trait-pill {
+  border-radius: 12px;
+  padding: 13px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.25;
+  border-width: 0;
+}
+
+/* ── FOOTER ── */
+.footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  margin-top: 8px;
+  border-top-width: 1.5px;
+  border-top-style: solid;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeUp 0.4s ease 1.1s forwards;
+}
+.footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-box {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  line-height: 1.5;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
+}
+.footer-center {
+  flex: 1;
+  text-align: center;
+}
+.footer-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  line-height: 1.6;
+}
+.footer-sub {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.share-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border-width: 1.5px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes bobFloat {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  50%      { transform: translateY(-6px) rotate(1.5deg); }
+}
+.medal-placeholder.loaded {
+  animation: bobFloat 3s ease-in-out infinite !important;
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+<canvas id="bgCanvas" width="390" height="844"></canvas>
+<div id="phone">
+  <div class="page" id="pageContent">
+    <!-- injected by JS -->
+  </div>
+</div>
+
+<script>
+/* ══════════ THEME DATA ══════════ */
+const CHARS = {
+  a: {
+    name: 'Echo',
+    theme: {
+      bg: '#e86518',
+      bgCircles: ['#f07828','#d05810','#f89050','#e07030','#c84808','#faa060','#d86020'],
+      nameBg: '#f5f0d0', nameBorder: '#e86518', nameText: '#e86518',
+      mottoLabelBg: '#e86518', mottoLabelText: '#fff',
+      mottoBoxBg: '#d0e8f8', mottoBoxBorder: '#a0c8e8', mottoBoxText: '#3060a0',
+      sensesTitle: '#fff',
+      pillBg: '#f5f0d0', pillBorder: '#e86518', pillText: '#e86518',
+      profileLabelBg: '#d05808', profileLabelText: '#fff',
+      profileBoxBg: '#f5f0d0', profileBoxBorder: '#e8c888', profileBoxText: '#c06010',
+      traitBg: '#e86518', traitText: '#fff',
+      footerBorder: 'rgba(255,255,255,0.3)', footerText: '#fff',
+    },
+    motto: '"Turn it down. Not me, everything else."',
+    senses: ['Hyper-aware', 'Zoned-in', 'Overstimulated'],
+    profile: 'You don\'t just notice things, you take them in fully. Small details can feel amplified, even when nothing is technically wrong. So you find ways to soften the world by stepping back, tuning out, or just sitting in quiet. That sensitivity isn\'t a flaw. It\'s awareness that needs space.',
+    traits: ['Detail-oriented', 'Easily distracted', 'Calm and Quiet', 'Active listener'],
+  },
+  b: {
+    name: 'Tip-Toe',
+    theme: {
+      bg: '#8a7450',
+      bgCircles: ['#9a8460','#7a6440','#b09878','#6a5430','#c0a888','#706040','#a08868'],
+      nameBg: '#f5f0d8', nameBorder: '#9a7040', nameText: '#5a3810',
+      mottoLabelBg: '#6a5030', mottoLabelText: '#f5f0d8',
+      mottoBoxBg: '#5a3818', mottoBoxBorder: '#7a5028', mottoBoxText: '#f5e8c8',
+      sensesTitle: '#f5f0d8',
+      pillBg: '#f5f0d8', pillBorder: '#9a7040', pillText: '#5a3810',
+      profileLabelBg: '#4a3010', profileLabelText: '#f5f0d8',
+      profileBoxBg: '#4a3010', profileBoxBorder: '#7a5028', profileBoxText: '#f5e8c8',
+      traitBg: '#f5f0d8', traitText: '#5a3810',
+      footerBorder: 'rgba(255,255,255,0.2)', footerText: '#f5f0d8',
+    },
+    motto: '"Don\'t ask, just let me hold something."',
+    senses: ['Restless', 'Physical', 'Self-soothing'],
+    profile: 'You process things through your body before your mind catches up. That need to move, hold, or adjust isn\'t random — it\'s how you steady yourself. What looks small from the outside is actually you keeping things together. You\'re not restless. You\'re regulating.',
+    traits: ['Always fidgeting', 'Feels before thinking', 'Creative about the world', 'Socially aware'],
+  },
+  c: {
+    name: 'Nibbles',
+    theme: {
+      bg: '#f0e4a0',
+      bgCircles: ['#e8d888','#d8c878','#f8f0b8','#c8b860','#e0d090','#b8a850','#f0e8a8'],
+      nameBg: '#c07838', nameBorder: '#8a5020', nameText: '#fff',
+      mottoLabelBg: '#6a3a10', mottoLabelText: '#f5f0d8',
+      mottoBoxBg: '#f8f0d0', mottoBoxBorder: '#c09050', mottoBoxText: '#6a3a10',
+      sensesTitle: '#7a4818',
+      pillBg: '#c07838', pillBorder: '#8a5020', pillText: '#fff',
+      profileLabelBg: '#5a2808', profileLabelText: '#f5f0d8',
+      profileBoxBg: '#fff8e8', profileBoxBorder: '#c09050', profileBoxText: '#6a3a10',
+      traitBg: '#6a3a10', traitText: '#f5f0d8',
+      footerBorder: 'rgba(100,60,10,0.3)', footerText: '#6a3a10',
+    },
+    motto: '"I just need one bite and I\'ll be okay."',
+    senses: ['Comfort-seeking', 'Soft', 'Nostalgic'],
+    profile: 'You return to what feels familiar when things don\'t. Not because you\'re avoiding anything — but because you know what helps. Comfort, for you, isn\'t big or dramatic. It\'s quiet, repetitive, and deeply personal. And that softness you rely on is also what makes others feel safe around you.',
+    traits: ['Super Particular', 'Finds comfort in small things', 'Brings warmth and ease to others', 'Operates with fixed routines'],
+  },
+  d: {
+    name: 'Sniffy',
+    theme: {
+      bg: '#607880',
+      bgCircles: ['#708890','#506870','#809898','#405860','#8aaaaa','#304850','#70909a'],
+      nameBg: '#2a5060', nameBorder: '#1a3848', nameText: '#fff',
+      mottoLabelBg: '#1a3848', mottoLabelText: '#c8e8f0',
+      mottoBoxBg: '#f8ffff', mottoBoxBorder: '#7ab0b8', mottoBoxText: '#1a3848',
+      sensesTitle: '#f0f8f8',
+      pillBg: '#2a5060', pillBorder: '#1a3848', pillText: '#c8e8f0',
+      profileLabelBg: '#1a3848', profileLabelText: '#c8e8f0',
+      profileBoxBg: '#f8ffff', profileBoxBorder: '#7ab0b8', profileBoxText: '#1a3848',
+      traitBg: '#2a5060', traitText: '#c8e8f0',
+      footerBorder: 'rgba(200,240,250,0.3)', footerText: '#c8e8f0',
+    },
+    motto: '"I need Fresh Air Immediately"',
+    senses: ['Intuitive', 'Sensitive', 'Atmospheric'],
+    profile: 'You don\'t just notice spaces, you feel them. A smell, a shift in air, a subtle change — your body picks it up before you can explain why. When something feels off, you trust it. When something feels calm, you stay. You are deeply intuitive, moving through the world by sensing what can\'t always be seen.',
+    traits: ['Picks up vibes instantly', 'Adapts well', 'Sentimental and emotional', 'Needs space to reset'],
+  },
+  e: {
+    name: 'Bug-Eye',
+    theme: {
+      bg: '#b8ccd8',
+      bgCircles: ['#a8c0cc','#98b0bc','#c8dce8','#88a0ac','#d8ecf8','#789098','#b0c8d4'],
+      nameBg: '#2a5868', nameBorder: '#1a4050', nameText: '#fff',
+      mottoLabelBg: '#3a6878', mottoLabelText: '#fff',
+      mottoBoxBg: '#f8ffff', mottoBoxBorder: '#8ab8c8', mottoBoxText: '#1a4050',
+      sensesTitle: '#1a4050',
+      pillBg: '#3a6878', pillBorder: '#1a4050', pillText: '#fff',
+      profileLabelBg: '#2a5868', profileLabelText: '#c8ecf8',
+      profileBoxBg: '#f8ffff', profileBoxBorder: '#8ab8c8', profileBoxText: '#1a4050',
+      traitBg: '#f8ffff', traitText: '#2a5868',
+      footerBorder: 'rgba(42,88,104,0.25)', footerText: '#2a5868',
+    },
+    motto: '"Dim the lights. Dim everything."',
+    senses: ['Overaware', 'Visual', 'Drained'],
+    profile: 'You take in more than most — details, movement, everything at once. And sometimes, it\'s just… a lot. So you step back, look away, or simplify what\'s around you. It\'s not that you can\'t handle it, you just know when you\'ve had enough.',
+    traits: ['Super Observant', 'Dislikes busy environments', 'Process things slowly', 'Visual learner'],
+  },
+};
+
+/* ── READ URL PARAM ── */
+const key = 'd';
+const C = CHARS[key] || CHARS['a'];
+const T = C.theme;
+
+/* ── DRAW BG CANVAS ── */
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.height = Math.max(window.innerHeight, 844);
+  ctx.fillStyle = T.bg;
+  ctx.fillRect(0, 0, 390, canvas.height);
+  const positions = [
+    { x: -40,  y:  -20, r: 130 },
+    { x: 290,  y:   30, r: 110 },
+    { x:  80,  y:  190, r: 155 },
+    { x: 330,  y:  250, r:  95 },
+    { x: -30,  y:  430, r: 130 },
+    { x: 300,  y:  480, r: 105 },
+    { x: 130,  y:  620, r: 150 },
+    { x: -50,  y:  750, r: 110 },
+    { x: 340,  y:  780, r: 120 },
+    { x: 180,  y:  900, r: 100 },
+  ];
+  positions.forEach(({ x, y, r }) => {
+    for (let i = 3; i >= 0; i--) {
+      ctx.beginPath();
+      ctx.arc(x, y, r * (1 - i * 0.2), 0, Math.PI * 2);
+      ctx.fillStyle = T.bgCircles[Math.floor(Math.random() * T.bgCircles.length)];
+      ctx.fill();
+    }
+  });
+})();
+
+/* ── BUILD PAGE ── */
+const page = document.getElementById('pageContent');
+page.innerHTML = `
+  <!-- TOP ROW -->
+  <div class="top-row">
+    <div class="name-block">
+      <div class="name-box" style="background:${T.nameBg}; border-color:${T.nameBorder};">
+        <span class="you-are-label" style="color:${T.nameText};">You Are</span>
+        <span class="char-name" style="color:${T.nameText};">${C.name}</span>
+      </div>
+    </div>
+    <div class="medal-placeholder" id="medal"
+      style="background:${T.nameBg}; border-color:${T.nameBorder}; color:${T.nameText}; opacity:0;">
+      medal<br>image<br>placeholder
+    </div>
+  </div>
+
+  <!-- MOTTO -->
+  <div class="motto-section">
+    <span class="motto-label" style="background:${T.mottoLabelBg}; color:${T.mottoLabelText};">Motto</span>
+    <div class="motto-text" style="background:${T.mottoBoxBg}; border-color:${T.mottoBoxBorder}; color:${T.mottoBoxText};">${C.motto}</div>
+  </div>
+
+  <!-- KEY SENSES -->
+  <div class="senses-section">
+    <span class="senses-title" style="color:${T.sensesTitle};">Key  Senses</span>
+    <div class="senses-pills">
+      ${C.senses.map(s => `<div class="sense-pill" style="background:${T.pillBg}; border-color:${T.pillBorder}; color:${T.pillText};">${s}</div>`).join('')}
+    </div>
+  </div>
+
+  <!-- FEELINE PROFILE -->
+  <div class="profile-section">
+    <div class="profile-left">
+      <span class="profile-label" style="background:${T.profileLabelBg}; color:${T.profileLabelText};">Feeline Profile</span>
+      <div class="profile-text-box" style="background:${T.profileBoxBg}; border-color:${T.profileBoxBorder}; color:${T.profileBoxText};">${C.profile}</div>
+    </div>
+    <div class="profile-right">
+      ${C.traits.map(t => `<div class="trait-pill" style="background:${T.traitBg}; color:${T.traitText};">${t}</div>`).join('')}
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer" style="border-top-color:${T.footerBorder};">
+    <div class="footer-logos">
+      <div class="logo-box" style="color:${T.footerText}; border-color:${T.footerBorder};">ACD<br>R4E</div>
+      <div class="logo-box" style="color:${T.footerText}; border-color:${T.footerBorder};">×<br>SAMH</div>
+    </div>
+    <div class="footer-center">
+      <div class="footer-title" style="color:${T.footerText};">'LETS TAKE 5'</div>
+      <div class="footer-sub" style="color:${T.footerText}; opacity:0.8;">Psychosis Awareness Campaign<br>1 Sep 2025 – 28 Nov 2025</div>
+    </div>
+    <button class="share-btn" style="border-color:${T.footerBorder}; color:${T.footerText};" onclick="share()">↑</button>
+  </div>
+`;
+
+/* ── MEDAL BOB after entry ── */
+setTimeout(() => {
+  document.getElementById('medal').classList.add('loaded');
+}, 800);
+
+/* ── SHARE ── */
+function share() {
+  if (navigator.share) {
+    navigator.share({ title: "I'm " + C.name + "!", text: C.motto, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(() => alert('Link copied!'));
+  }
+}
+</script>
+</body>
+</html>

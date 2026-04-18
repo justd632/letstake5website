@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Feeline Personality Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  background: #8aa8b8;
+  display: flex;
+  justify-content: center;
+  font-family: 'Caveat', cursive;
+}
+
+#phone {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  background: #b8d0de;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── SCREENS ── */
+.screen {
+  position: absolute;
+  inset: 0;
+  width: 390px;
+  height: 844px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}
+.screen::-webkit-scrollbar { display: none; }
+
+/* slide transitions */
+.screen { transform: translateX(100%); transition: transform 0.4s cubic-bezier(.4,0,.2,1), visibility 0s 0.4s; visibility: hidden; }
+.screen.active { transform: translateX(0); visibility: visible; transition: transform 0.4s cubic-bezier(.4,0,.2,1), visibility 0s 0s; }
+.screen.exit   { transform: translateX(-100%); visibility: visible; transition: transform 0.4s cubic-bezier(.4,0,.2,1), visibility 0s 0s; }
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #b8d0de;
+  padding: 10px 20px 8px;
+  flex-shrink: 0;
+}
+.progress-track {
+  height: 6px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: #e86518;
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+.progress-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #e86518;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* ── QUESTION CARD ── */
+.q-card {
+  margin: 8px 14px 0;
+  background: #f5f0d0;
+  border-radius: 20px;
+  padding: 14px 14px 18px;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 4px 0 #c8b878;
+}
+.q-number {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: #e86518;
+  margin-bottom: 10px;
+  display: block;
+}
+.q-image-placeholder {
+  width: 100%;
+  aspect-ratio: 3/2.6;
+  background: #ddd8b0;
+  border: 2.5px solid #e86518;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c8a860;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  text-align: center;
+  padding: 10px;
+  line-height: 1.8;
+}
+
+/* ── ORANGE BANNER ── */
+.q-banner {
+  margin: 10px 14px 0;
+  background: #e86518;
+  padding: 16px 18px;
+  flex-shrink: 0;
+}
+.q-story {
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.45;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.q-prompt {
+  font-size: 19px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* ── ANSWER BUTTONS ── */
+.answers-wrap {
+  background: #b8d0de;
+  padding: 14px 12px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* faint deco lines background */
+.answers-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 28px,
+    rgba(255,255,255,0.15) 28px, rgba(255,255,255,0.15) 29px
+  );
+  pointer-events: none;
+}
+
+.ans-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+.ans-bullet {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #e86518;
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  user-select: none;
+}
+.ans-btn {
+  flex: 1;
+  min-width: 0;
+  background: #f5f0d0;
+  border: none;
+  border-radius: 30px;
+  padding: 11px 14px;
+  font-family: 'Caveat', cursive;
+  font-size: 17px;
+  font-weight: 600;
+  color: #e86518;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.25;
+  word-wrap: break-word;
+  white-space: normal;
+  transition: transform 0.08s, box-shadow 0.08s, background 0.15s;
+  box-shadow: 0 4px 0 #c8a850;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+.ans-btn:hover {
+  background: #ffe8a0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #c8a850;
+}
+.ans-btn:active, .ans-btn.chosen {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #c8a850;
+  background: #e86518;
+  color: #fff;
+}
+.ans-btn.chosen {
+  animation: chosenPop 0.35s cubic-bezier(.36,.07,.19,.97) forwards;
+}
+
+/* shimmer on hover */
+.ans-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0s;
+}
+.ans-btn:hover::after { left: 130%; transition: left 0.4s ease; }
+
+/* ── RESULT SCREEN ── */
+#result-screen {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  outline: 10px solid #e8c8a8;
+}
+#result-screen::-webkit-scrollbar { display: none; }
+
+.result-bg-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 390px; height: 844px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.result-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 70px 30px 50px;
+  width: 100%;
+}
+
+/* arc + circle combo */
+.result-badge {
+  position: relative;
+  width: 280px;
+  height: 300px;
+  margin-bottom: 28px;
+  animation: badgeDrop 0.7s cubic-bezier(.34,1.56,.64,1) 0.1s both;
+}
+
+/* SVG arc text on top */
+.result-arc-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 280px; height: 280px;
+  z-index: 3;
+  animation: arcFadeIn 0.6s ease 0.5s both;
+}
+
+/* the coloured circle */
+.result-circle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+  overflow: hidden;
+  z-index: 2;
+  animation: circlePop 0.65s cubic-bezier(.34,1.56,.64,1) 0.15s both;
+}
+
+/* idle bob on the whole badge */
+@keyframes badgeBob {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
+}
+.result-badge.revealed { animation: badgeBob 3s ease-in-out infinite; }
+
+/* placeholder area (no image) */
+.result-cat-space {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result-cat-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: 1px;
+  z-index: 2;
+  position: relative;
+  animation: nameSlideUp 0.5s ease 0.6s both;
+}
+.result-cat-name.dark { color: #3a2808; }
+.result-cat-name.mid  { color: #2a4858; }
+
+/* text body */
+.result-lines {
+  text-align: center;
+  width: 100%;
+  padding: 0 10px;
+}
+.result-line {
+  font-family: 'Caveat', cursive;
+  font-size: 23px;
+  font-weight: 500;
+  color: #c86010;
+  text-align: center;
+  line-height: 1.55;
+  margin-bottom: 4px;
+  opacity: 0;
+}
+.result-line.bold {
+  font-size: 25px;
+  font-weight: 700;
+  color: #e86518;
+  margin-top: 8px;
+}
+.result-line.revealed { animation: lineFadeUp 0.5s ease forwards; }
+
+.full-result-btn {
+  margin-top: 36px;
+  background: #e86518;
+  border: none;
+  border-radius: 18px;
+  padding: 22px 52px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 2px;
+  box-shadow: 0 7px 0 #a04010;
+  transition: transform 0.08s, box-shadow 0.08s;
+  opacity: 0;
+  animation: none;
+}
+.full-result-btn.revealed {
+  animation: lineFadeUp 0.5s ease forwards;
+}
+.full-result-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 0 #a04010;
+}
+.full-result-btn:active {
+  transform: translateY(5px);
+  box-shadow: 0 2px 0 #a04010;
+}
+
+/* ── RESULT KEYFRAMES ── */
+@keyframes badgeDrop {
+  from { opacity: 0; transform: scale(0.6) translateY(-20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes circlePop {
+  from { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  to   { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+@keyframes arcFadeIn {
+  from { opacity: 0; transform: rotate(-15deg) scale(0.85); }
+  to   { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+@keyframes nameSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lineFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes arcRotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── KEYFRAMES ── */
+@keyframes chosenPop {
+  0%   { transform: translateY(3px) scale(1); }
+  40%  { transform: translateY(3px) scale(0.95); }
+  70%  { transform: translateY(-2px) scale(1.04); }
+  100% { transform: translateY(3px) scale(1); }
+}
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bannerSlideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes ansStagger {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes sparkPop {
+  0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+  60%  { transform: scale(1.4) rotate(200deg); opacity: 1; }
+  100% { transform: scale(0.8) rotate(360deg); opacity: 0; }
+}
+@keyframes resultDrop {
+  from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes resultFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-card    { animation: cardSlideIn   0.4s ease both; }
+.q-banner  { animation: bannerSlideIn 0.4s ease 0.1s both; }
+.ans-row   { animation: ansStagger 0.35s ease both; }
+
+.sparkle-pop {
+  position: absolute;
+  font-size: 15px;
+  pointer-events: none;
+  z-index: 30;
+  animation: sparkPop 0.6s ease-out forwards;
+  user-select: none;
+}
+</style>
+</head>
+<body>
+<div id="phone">
+  <canvas class="result-bg-canvas" id="bgCanvas" width="390" height="844"></canvas>
+
+  <!-- ══════════════════════════════════ QUESTIONS ══════════════════════════════════ -->
+
+  <!-- Q1 -->
+  <div class="screen" id="q1">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:12.5%"></div></div>
+      <div class="progress-label">1 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q1.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q1 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">The Night Feels Different. It's late. The void deck is quieter, but not quiet-quiet. Lights hum. Someone laughs upstairs. A plastic bag drifts past. Echo tilts their head. "Eh… does today feel different to you or am I just tired?"</p>
+      <p class="q-prompt">What's the first thing you notice?</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">Sounds feel sharper than usual</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">Your body feels restless for no reason</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">You suddenly want something comforting</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">The air smells stronger today</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">Lights and faces feel a bit too much</button></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="screen" id="q2">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:25%"></div></div>
+      <div class="progress-label">2 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q2.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q2 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">Your Instinct Kicks In. Nothing bad is happening. But something feels off. Not scary. Just messy. Bug-Eye squints at the lights. "When this happens, what do you usually do without thinking?"</p>
+      <p class="q-prompt">You tend to:</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">Touch something, fidget, or pace</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">Snack without realising</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">Tune into one sound or block noise out</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">Look down or half-close your eyes</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">Step away and focus on breathing</button></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="screen" id="q3">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:37.5%"></div></div>
+      <div class="progress-label">3 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q3.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q3 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">Trying to Settle. Tiptoe presses both feet flat on the floor. "Okay but… this helps me. What helps you calm down?"</p>
+      <p class="q-prompt">You feel better when you:</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">Eat slowly, on purpose</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">Focus on one repeating sound</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">Reduce what you're seeing</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">Feel something solid or textured</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">Smell something familiar</button></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="screen" id="q4">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:50%"></div></div>
+      <div class="progress-label">4 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q4.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q4 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">Comfort, Your Version. Nibbles holds up a snack with crumbs everywhere. "Comfort is subjective, okay. No judgement."</p>
+      <p class="q-prompt">Your kind of comfort looks like:</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">Headphones on, world muted</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">A food you've loved since forever</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">Dim lights, minimal eye contact</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">Hoodie sleeves, something to hold</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">A smell that reminds you of home</button></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="screen" id="q5">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:62.5%"></div></div>
+      <div class="progress-label">5 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q5.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q5 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">When People Are Around. The void deck isn't empty anymore. A few people pass by. Someone sits nearby. Sniffy glances up. "When people are around and things feel weird… you usually?"</p>
+      <p class="q-prompt">You tend to:</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">Eat or drink something</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">Go quiet and listen more</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">Step outside for air</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">Ground yourself physically</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">Avoid eye contact</button></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="screen" id="q6">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:75%"></div></div>
+      <div class="progress-label">6 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q6.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q6 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">The Thought That Loops. Everyone's sitting still now. No one's rushing to fix anything. Bug-Eye speaks softly.</p>
+      <p class="q-prompt">What's the thought that keeps looping in your head?</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">"Why is everything so loud?"</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">"I don't feel real right now."</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">"I just want something familiar."</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">"Everything feels too bright."</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">"This smell is either calming or too much."</button></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="screen" id="q7">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:87.5%"></div></div>
+      <div class="progress-label">7 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q7.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q7 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">When It Gets Better. Time passes. Nothing changes, but somehow, it eases. Echo listens to the distance.</p>
+      <p class="q-prompt">When you start feeling okay again, it's usually because…</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">You've eaten something comforting</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">Your body relaxes</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">The noise settles</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">You can breathe properly</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">You stop over-seeing</button></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="screen" id="q8">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="progress-label">8 / 8</div>
+    </div>
+    <div class="q-card">
+      <span class="q-number">Q8.</span>
+      <div class="q-image-placeholder">image placeholder<br>Q8 illustration</div>
+    </div>
+    <div class="q-banner">
+      <p class="q-story">Quiet Truth. They sit together, just existing. No pressure. No fixing.</p>
+      <p class="q-prompt">Which line feels the most like you?</p>
+    </div>
+    <div class="answers-wrap">
+      <div class="ans-row" style="animation-delay:0.18s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('a')">"Sound affects me more than I admit."</button></div>
+      <div class="ans-row" style="animation-delay:0.24s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('b')">"My body reacts before my brain."</button></div>
+      <div class="ans-row" style="animation-delay:0.30s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('c')">"Comfort doesn't need explaining."</button></div>
+      <div class="ans-row" style="animation-delay:0.36s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('d')">"Smell grounds me."</button></div>
+      <div class="ans-row" style="animation-delay:0.42s"><span class="ans-bullet">✱</span><button class="ans-btn" onclick="answer('e')">"Seeing less helps."</button></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ RESULT ══════════════════════════════════ -->
+  <div class="screen" id="result-screen">
+    <div class="result-content">
+
+      <!-- badge: arc text + circle -->
+      <div class="result-badge" id="resultBadge">
+        <!-- curved arc text SVG -->
+        <svg class="result-arc-svg" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="arcPath" d="M 140,140 m -122,0 a 122,122 0 1,1 244,0"/>
+          </defs>
+          <text font-family="'Caveat', cursive" font-size="17" fill="#e86518" font-weight="700" letter-spacing="1">
+            <textPath href="#arcPath" startOffset="4%">So... this sense just does more for you</textPath>
+          </text>
+        </svg>
+        <!-- coloured circle -->
+        <div class="result-circle" id="resultCircle">
+          <div class="result-cat-space"></div>
+          <span class="result-cat-name" id="resultCatName">—</span>
+        </div>
+      </div>
+
+      <!-- text lines -->
+      <div class="result-lines">
+        <p class="result-line" id="resultLine1">Not because something's wrong..</p>
+        <p class="result-line" id="resultLine2">but because that's how you cope.</p>
+        <p class="result-line bold" id="resultLine3">You just make sense.</p>
+      </div>
+
+      <button class="full-result-btn" id="fullResultBtn" onclick="goFullResult()">FULL RESULT</button>
+    </div>
+  </div>
+
+</div><!-- /#phone -->
+
+<script>
+/* ── DATA ── */
+const questions = ['q1','q2','q3','q4','q5','q6','q7','q8'];
+let current = 0;
+const scores = { a: 0, b: 0, c: 0, d: 0, e: 0 };
+
+const RESULTS = {
+  a: { name: 'Echo',    color: '#e86518', nameClass: '',     line1: 'Sound does a lot for you.',             line2: 'More than most people realise.',        line3: 'You just make sense.' },
+  b: { name: 'Tip-Toe', color: '#4a3010', nameClass: '',     line1: 'Your body knows before your mind does.', line2: 'Movement and touch anchor you.',         line3: 'You just make sense.' },
+  c: { name: 'Nibbles', color: '#e8d898', nameClass: 'dark', line1: 'Taste and something familiar',           line2: 'is how you come home to yourself.',     line3: 'You just make sense.' },
+  d: { name: 'Sniffy',  color: '#3a6878', nameClass: '',     line1: 'Not because something\'s wrong..',       line2: 'but because that\'s how you cope.',     line3: 'You just make sense.' },
+  e: { name: 'Bug-eye', color: '#c0d4e4', nameClass: 'mid',  line1: 'What you see shapes how you feel.',      line2: 'Less input, more you.',                 line3: 'You just make sense.' },
+};
+
+/* ── BACKGROUND CIRCLES ── */
+(function() {
+  const c = document.getElementById('bgCanvas');
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#f5f0e8';
+  ctx.fillRect(0, 0, 390, 844);
+  const circles = [
+    { x: -30,  y:  40, r: 110, colors: ['#c8b898','#ddd0b8','#f0e8d0'] },
+    { x: 270,  y: -20, r:  95, colors: ['#b8c8d4','#ccdae4'] },
+    { x:  60,  y: 200, r: 130, colors: ['#c8b898','#ddd0b8'] },
+    { x: 310,  y: 230, r:  80, colors: ['#b8c8d4','#ccdae4'] },
+    { x: -20,  y: 440, r: 115, colors: ['#c8b898','#ddd0b8'] },
+    { x: 310,  y: 470, r:  90, colors: ['#b8c8d4','#dde8f0'] },
+    { x: 140,  y: 590, r: 140, colors: ['#c8b898','#e0d0b8','#f0e8d4'] },
+    { x: -40,  y: 720, r:  90, colors: ['#b8c8d4','#ccdae4'] },
+    { x: 340,  y: 760, r: 110, colors: ['#c8b898','#ddd0b8'] },
+  ];
+  circles.forEach(({ x, y, r, colors }) => {
+    for (let i = 3; i >= 0; i--) {
+      ctx.beginPath();
+      ctx.arc(x, y, r * (1 - i * 0.22), 0, Math.PI * 2);
+      ctx.fillStyle = colors[Math.min(i, colors.length - 1)];
+      ctx.fill();
+    }
+  });
+})();
+
+/* ── INIT: show Q1 ── */
+document.getElementById('q1').classList.add('active');
+
+/* ── SPARKLES ── */
+const STARS = ['✦','✧','★','✨','◆'];
+function spawnSparkles(btn) {
+  const pr = document.getElementById('phone').getBoundingClientRect();
+  const br = btn.getBoundingClientRect();
+  const cx = (br.left - pr.left) + br.width / 2;
+  const cy = (br.top  - pr.top)  + br.height / 2;
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle-pop';
+    s.textContent = STARS[Math.floor(Math.random() * STARS.length)];
+    const angle = (Math.PI * 2 / 5) * i;
+    const dist  = 44 + Math.random() * 20;
+    s.style.left  = (cx + Math.cos(angle) * dist - 8) + 'px';
+    s.style.top   = (cy + Math.sin(angle) * dist - 8) + 'px';
+    s.style.color = ['#e86518','#ffaa40','#ff6030','#ffd060'][i % 4];
+    s.style.animationDelay = (i * 0.05) + 's';
+    document.getElementById('phone').appendChild(s);
+    setTimeout(() => s.remove(), 700);
+  }
+}
+
+/* ── ANSWER + TRANSITION ── */
+function answer(choice) {
+  scores[choice]++;
+
+  // highlight chosen button
+  const screen = document.getElementById(questions[current]);
+  const btns = screen.querySelectorAll('.ans-btn');
+  btns.forEach(b => b.disabled = true);
+
+  // find and animate the clicked button (all buttons in same row)
+  event.target.classList.add('chosen');
+  spawnSparkles(event.target);
+
+  setTimeout(() => {
+    current++;
+    if (current < questions.length) {
+      goToScreen(questions[current - 1], questions[current]);
+    } else {
+      showResult();
+    }
+  }, 420);
+}
+
+function goToScreen(fromId, toId) {
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+
+  // reset scroll
+  to.scrollTop = 0;
+
+  to.classList.add('active');
+  requestAnimationFrame(() => {
+    from.classList.add('exit');
+    setTimeout(() => {
+      from.classList.remove('active', 'exit');
+    }, 420);
+  });
+}
+
+let winnerKey = 'a';
+
+/* ── RESULT ── */
+function showResult() {
+  let top = 'a', max = 0;
+  for (const k in scores) {
+    if (scores[k] > max) { max = scores[k]; top = k; }
+  }
+  winnerKey = top;
+  const res = RESULTS[top];
+
+  // set circle color + name
+  const circle = document.getElementById('resultCircle');
+  circle.style.background = res.color;
+  const nameEl = document.getElementById('resultCatName');
+  nameEl.textContent = res.name;
+  nameEl.className = 'result-cat-name' + (res.nameClass ? ' ' + res.nameClass : '');
+
+  // set text lines
+  document.getElementById('resultLine1').textContent = res.line1;
+  document.getElementById('resultLine2').textContent = res.line2;
+  document.getElementById('resultLine3').textContent = res.line3;
+
+  goToScreen(questions[questions.length - 1], 'result-screen');
+
+  // staggered reveals after slide-in
+  setTimeout(() => {
+    // badge bobs after pop animation
+    document.getElementById('resultBadge').classList.add('revealed');
+
+    // stagger the text lines
+    const lines = document.querySelectorAll('.result-line');
+    lines.forEach((l, i) => {
+      setTimeout(() => {
+        l.style.animationDelay = '0s';
+        l.classList.add('revealed');
+      }, i * 160);
+    });
+
+    // button last
+    setTimeout(() => {
+      document.getElementById('fullResultBtn').classList.add('revealed');
+    }, lines.length * 160 + 100);
+  }, 500);
+}
+function goFullResult() {
+  const fileMap = {
+    a: 'result-echo.html',
+    b: 'result-tiptoe.html',
+    c: 'result-nibbles.html',
+    d: 'result-sniffy.html',
+    e: 'result-bugeye.html',
+  };
+  window.location.href = fileMap[winnerKey] || 'result-echo.html';
+}
+</script>
+</body>
+</html>
